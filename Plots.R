@@ -66,7 +66,7 @@ A <- ggplot(studies, aes(x=reorder(Design,Frequency),y=Frequency)) +
 
 
 
-### Waffle plot  (parameters)
+### Waffle plot  (type of parameters)
 
 library(waffle)
 
@@ -78,9 +78,8 @@ B <- waffle(
   size = 2,
   flip=TRUE, glyph_size = 12, xlab="1 square = 1 reference") 
 
-###################
 
-## map 
+### map 
 
 library(ggplot2)             
 library(tidyverse)   
@@ -109,6 +108,6 @@ map1
 
 ### figure 2
 
-figure2 <- cowplot::plot_grid(A, map1, B, nrow = 2, labels= "AUTO");figure2 
+figure2 <- cowplot::plot_grid(A, B, map1,  nrow = 2, labels= "AUTO");figure2 
 
 
