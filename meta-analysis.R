@@ -1,6 +1,7 @@
 
 
 library(meta)
+library(metafor)
 
 #serial interval
 
@@ -13,22 +14,20 @@ sd <- c(1.5,5,6.1,10.9,19.9)
 
 df <- data.frame(study,n,mean,sd)
 
-
 m1 <- metamean(n = n,
                mean = mean,
                sd = sd,
                studlab = study,
                data = df,
                sm = 'MLN',
-               random = TRUE,
+               random = T,
                common = F,
                warn = F,
                prediction = F,
                title = "Serial interval")
 
-png(file='plot_SI.png', width = 700, height = 250)
 forest(m1, col.diamond = "blue", col.diamond.lines = "black", xlab = "Serial interval")
-dev.off()
+
 
 
 #incubation period 
@@ -60,28 +59,28 @@ m2 <- metamean(n = n2,
                prediction = F,
                title = "Incubation period")
 
-png(file='plot_IP.png', width = 1100, height = 540)
-forest(m2, col.diamond = "blue", col.diamond.lines = "black", xlab = "Incubation period")
-dev.off() 
+
+forest2 <- forest(m2, col.diamond = "blue", col.diamond.lines = "black", xlab = "Incubation period");forest2
+
 
 
 #generation time
 
-study5 <- c("Guzzeta (2022)","Wei (2022)")
+study3 <- c("Guzzeta (2022)","Wei (2022)")
 
-n5 <- c(16,77) 
+n3 <- c(16,77) 
 
-mean5 <- c(12.5,10.38)
+mean3 <- c(12.5,10.38)
 
-sd5 <- c(15.42,15.3)
+sd3 <- c(15.42,15.3)
 
-df5 <- data.frame(study5,n5,mean5,sd5)
+df3 <- data.frame(study3,n3,mean3,sd3)
 
-m5 <- metamean(n = n5,
-               mean = mean5,
-               sd = sd5,
-               studlab = study5,
-               data = df5,
+m3 <- metamean(n = n3,
+               mean = mean3,
+               sd = sd3,
+               studlab = study3,
+               data = df3,
                sm = 'MLN',
                random = TRUE,
                common = F,
@@ -89,9 +88,9 @@ m5 <- metamean(n = n5,
                prediction = F,
                title = "Generation time")
 
-png(file='plot_GT.png', width = 700, height = 200)
-forest(m5, col.diamond = "blue", col.diamond.lines = "black", xlab = "Generation time")
-dev.off()
+
+forest3 <- forest(m3, col.diamond = "blue", col.diamond.lines = "black", xlab = "Generation time");forest3
+
 
 ###########CFR 
 
@@ -112,52 +111,32 @@ CFR_m <- metaprop(data=CFR,
 
 summary(CFR_m)
 
-png(file='plot_CFR.png', width = 700, height = 400)
-forest(CFR_m, digits = 4L, col.diamond = "blue", col.diamond.lines = "black", xlab = "Case fatality rate")
-dev.off()
 
+forest4 <- forest(CFR_m, digits = 3L, col.diamond = "blue", col.diamond.lines = "black", xlab = "Case fatality rate");forest4
 
-library(png)
-library(grid)
-library(gridExtra)
-
-plot_SI <- readPNG('plot_SI.png')
-plot_IP <- readPNG('plot_IP.png')
-plot_GT <- readPNG('plot_GT.png')
-plot_CFR <- readPNG('plot_CFR.png')
-
-grid.arrange(ncol = 1,
-             rasterGrob(plot_IP),
-             rasterGrob(plot_SI),
-             rasterGrob(plot_GT),
-             rasterGrob(plot_CFR) 
-)
-
-###########Subgroup analysis#############
-
-
+###########Sensitivity analysis#############
 
 #incubation (only mathematical models)
 
-study3 <- c("Charniga (2022)","Guzzeta (2022)", "McFarland (2023)", "Madawell (2022)",  "Miura (2022)", "Miura (2023)", 
+study5 <- c("Charniga (2022)","Guzzeta (2022)", "McFarland (2023)", "Madawell (2022)",  "Miura (2022)", "Miura (2023)", 
             "Ward (2023)", "Wei (2022)", "UKHSA (1)","UKHSA (2)")
 
-n3 <- c(22,30,122,35,18,36,54,77,33,33) 
+n5 <- c(22,30,122,35,18,36,54,77,33,33) 
 
 
-mean3 <- c(7.6,9.1,8,5.6,9.1,8.1,7.8,8.23,9.2,9.2)
+mean5 <- c(7.6,9.1,8,5.6,9.1,8.1,7.8,8.23,9.2,9.2)
 
 
-sd3 <- c(1.8,9.275,19,4.4,9.42,4.4,7.55,20.17,19.7,13.2)
+sd5 <- c(1.8,9.275,19,4.4,9.42,4.4,7.55,20.17,19.7,13.2)
 
 
-df3 <- data.frame(study3,n3,mean3,sd3)
+df5 <- data.frame(study5,n5,mean5,sd5)
 
-m3 <- metamean(n = n3,
-               mean = mean3,
-               sd = sd3,
-               studlab = study3,
-               data = df3,
+m5 <- metamean(n = n5,
+               mean = mean5,
+               sd = sd5,
+               studlab = study5,
+               data = df5,
                sm = 'MLN',
                random = TRUE,
                common = F,
@@ -165,32 +144,32 @@ m3 <- metamean(n = n3,
                prediction = F,
                title = "Incubation period")
 
-png(file='plot_IP_m.png', width = 700, height = 330)
-forest(m3, col.diamond = "blue", col.diamond.lines = "black", xlab = "Incubation period (mathematical models)")
-dev.off() 
+
+forest5 <- forest(m5, col.diamond = "blue", col.diamond.lines = "black", xlab = "Incubation period (mathematical models)")
+
 
 #incubation period (only non mathematical models)
 
-study4 <- c("Angelo (2023)","Català (2022)","Choudury (2022)", "Cobos (2023)", "Gaspari (2022)", "Gomez-Garberi (2022)", 
+study6 <- c("Angelo (2023)","Català (2022)","Choudury (2022)", "Cobos (2023)", "Gaspari (2022)", "Gomez-Garberi (2022)", 
             "Kroger (2023)",   "Mailhe (2023)","Maldonado (2022)", "Moschese (2023)","Nunez (2023)", "O Laughlin (2022)", 
             "Suarez Rodriguez (2022)","Tarin-Vicente (2022)", "Thornhill (2022)", "Thornhill (2022)")
 
-n4 <- c(226,77,179,19,30,14,209,112,205,32,18,230,45,181,23,51) 
+n6 <- c(226,77,179,19,30,14,209,112,205,32,18,230,45,181,23,51) 
 
 
-mean4 <- c(8,6,7,8,9,13,8.3,6,7,11,8,7,7,7,7,7)
+mean6 <- c(8,6,7,8,9,13,8.3,6,7,11,8,7,7,7,7,7)
 
 
-sd4 <- c(8.5,7,8,7.5,14,29.2,5.2,7.25,12.5,10.5,7,7,18.7,19.25,19.25,23.75)
+sd6 <- c(8.5,7,8,7.5,14,29.2,5.2,7.25,12.5,10.5,7,7,18.7,19.25,19.25,23.75)
 
 
-df4 <- data.frame(study4,n4,mean4,sd4)
+df6 <- data.frame(study6,n6,mean6,sd6)
 
-m4 <- metamean(n = n4,
-               mean = mean4,
-               sd = sd4,
-               studlab = study4,
-               data = df4,
+m6 <- metamean(n = n6,
+               mean = mean6,
+               sd = sd6,
+               studlab = study6,
+               data = df6,
                sm = 'MLN',
                random = TRUE,
                common = F,
@@ -199,19 +178,27 @@ m4 <- metamean(n = n4,
                title = "Incubation period")
 
 
-png(file='plot_IP_p.png', width = 700, height = 400)
-forest(m4, col.diamond = "blue", col.diamond.lines = "black", xlab = "Incubation period (primary study designs)")
-dev.off()
 
-
-#incubation period 
+forest6 <- forest(m4, col.diamond = "blue", col.diamond.lines = "black", xlab = "Incubation period (non-mathematical models)")
 
 
 
+#cfr (non endemic countries, excluding global studies and nigeria study)
 
 
+CFR2 <- read_excel("data/bd.xlsx", sheet = "CFR2")
+CFR2$ref <- paste0(CFR2$authors, " (", CFR2$year, ")")
+
+CFR2 <- metaprop(data=CFR2,
+                 n=total,
+                 event = event,
+                 studlab = ref,
+                 sm="PLOGIT",
+                 method = "GLMM",
+                 fixed = F,
+                 random = T)
 
 
-
+forest7 <- forest(CFR2, digits = 3L, col.diamond = "blue", col.diamond.lines = "black", xlab = "CFR non endemic countries")
 
 
