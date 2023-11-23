@@ -33,8 +33,8 @@ diamond_data <- create_diamond(center_x = 1,
                                height = 5)
 
 # Your existing ggplot code
-p <- 
-  ggplot(df, aes(x = StudyLevels, y = Mean)) +
+
+ggplot(df, aes(x = StudyLevels, y = Mean)) +
   geom_errorbar(aes(ymin = LowerCI, ymax = UpperCI), width = 0.01, color = "black", size = 0.3) + # Confidence interval error bars
   geom_hline(yintercept = effect_model$Mean, linetype = "dashed", color = "darkblue") + # Vertical line at x = 1
   geom_point(aes(size = Weight), fill = "grey", pch = 22, colour = "black") + # Use color to differentiate points
@@ -54,11 +54,12 @@ p <-
   #       axis.title.x = element_blank(), # No axis title
   #       plot.title = element_text(hjust = 0.5)) + # Center the plot title
   labs(title = "Serial Interval", x = "", y = "Days") + # Title of the plot 
+  theme_bw()+
   theme(legend.position = c(0.8, 0.5), legend.key.size = unit(1, 'mm'), 
         legend.text = element_text(size=8), legend.title = element_text(size=8))  +
   theme(legend.position = "none")
 
-p
+
 
 
 
