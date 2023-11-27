@@ -28,11 +28,17 @@ ggplot(studies,
 
 library(waffle)
 
+my_palette <- c("#66c2a5", "#9970ab", "orange", 
+                "#fb9a99", "#2b8cbe", "#f0027f",
+                "#bf5b17", "white")
+
 B <- waffle(
-  c('Incubation period' = 26, 'Case fatality rate' = 24,  
+  c('Incubation period' = 26, 
+    'Case fatality rate' = 24,  
     'Basic reproduction number' = 9,
     'Effective reproduction number' = 8, 
-    'Serial interval' = 5, 'Generation time' = 2,
+    'Serial interval' = 5, 
+    'Generation time' = 2,
     'Infectious period' = 1), 
   rows = 10, 
   size = 2,
@@ -42,23 +48,25 @@ B <- waffle(
   theme_bw(12) +
   theme(legend.position = "bottom", 
         legend.spacing.y = unit(2, 'mm'),
-        legend
         legend.direction = "horizontal") +
   guides(fill=guide_legend(nrow=4,byrow=FALSE)) +
   theme(legend.key.height= unit(2, 'mm'),
         legend.key.width= unit(4, 'mm')) +
+  # scale_fill_brewer(palette = "Set1", na.value = "grey90") +
+  # scale_fill_tron() +
+  # scale_fill_brewer(palette = "Set1") +
+  scale_fill_manual (values = my_palette) +
+  labs(fill ="") +
   theme(axis.text = element_blank(), axis.ticks = element_blank())
 
-
-cowplot::plot_grid(A, B, 
-                   rel_widths = c(0.3, 0.8), 
+cowplot::plot_grid(A, NULL, B, nrow = 1,
+                   rel_widths = c(0.3, 0.1, 0.8), 
                    rel_heights = c(1, 1))
 
 ###################
 
 
 
-## map 
 
 library(ggplot2)             
 library(tidyverse)   
