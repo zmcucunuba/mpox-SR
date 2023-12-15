@@ -26,6 +26,8 @@ m1 <- metamean(n = n,
                prediction = F,
                title = "Serial interval")
 
+summary(m1)
+
 forest(m1, col.diamond = "blue", col.diamond.lines = "black", xlab = "Serial interval")
 
 
@@ -58,6 +60,7 @@ m2 <- metamean(n = n2,
                warn = F,
                prediction = F,
                title = "Incubation period")
+summary(m2)
 
 
 forest2 <- forest(m2, col.diamond = "blue", col.diamond.lines = "black", xlab = "Incubation period");forest2
@@ -144,6 +147,8 @@ m5 <- metamean(n = n5,
                prediction = F,
                title = "Incubation period")
 
+summary(m5)
+
 
 forest5 <- forest(m5, col.diamond = "blue", col.diamond.lines = "black", xlab = "Incubation period (mathematical models)")
 
@@ -177,28 +182,96 @@ m6 <- metamean(n = n6,
                prediction = F,
                title = "Incubation period")
 
-
-
-forest6 <- forest(m4, col.diamond = "blue", col.diamond.lines = "black", xlab = "Incubation period (non-mathematical models)")
+summary(m6)
 
 
 
-#cfr (non endemic countries, excluding global studies and nigeria study)
+forest6 <- forest(m6, col.diamond = "blue", col.diamond.lines = "black", xlab = "Incubation period (non-mathematical models)")
 
 
-CFR2 <- read_excel("data/bd.xlsx", sheet = "CFR2")
-CFR2$ref <- paste0(CFR2$authors, " (", CFR2$year, ")")
 
-CFR2 <- metaprop(data=CFR2,
-                 n=total,
-                 event = event,
-                 studlab = ref,
+#cfr (global)
+
+
+CFR_global <- read_excel("data/bd.xlsx", sheet = "Global")
+
+
+CFR_global<- metaprop(data=CFR_global,
+                 n=Total,
+                 event = Events,
+                 studlab = Study,
                  sm="PLOGIT",
                  method = "GLMM",
                  fixed = F,
                  random = T)
 
 
-forest7 <- forest(CFR2, digits = 3L, col.diamond = "blue", col.diamond.lines = "black", xlab = "CFR non endemic countries")
+forest7 <- forest(CFR_global, digits = 3L, col.diamond = "blue", col.diamond.lines = "black", xlab = "CFR (Global studies)")
+
+summary(CFR_global)
+
+
+
+#cfr (americas)
+
+
+CFR_americas <- read_excel("data/bd.xlsx", sheet = "Americas")
+
+
+CFR_americas<- metaprop(data=CFR_americas,
+                      n=Total,
+                      event = Events,
+                      studlab = Study,
+                      sm="PLOGIT",
+                      method = "GLMM",
+                      fixed = F,
+                      random = T)
+
+
+forest8 <- forest(CFR_americas, digits = 3L, col.diamond = "blue", col.diamond.lines = "black", xlab = "CFR (Global studies)")
+
+summary(CFR_americas)
+
+
+#cfr (europa)
+
+
+CFR_Europe <- read_excel("data/bd.xlsx", sheet = "Europa")
+
+
+CFR_Europe<- metaprop(data=CFR_Europe,
+                        n=Total,
+                        event = Events,
+                        studlab = Study,
+                        sm="PLOGIT",
+                        method = "GLMM",
+                        fixed = F,
+                        random = T)
+
+
+forest9 <- forest(CFR_Europe, digits = 3L, col.diamond = "blue", col.diamond.lines = "black", xlab = "CFR (Global studies)")
+
+summary(CFR_Europe)
+
+#cfr (africa)
+
+
+CFR_Africa <- read_excel("data/bd.xlsx", sheet = "Africa")
+
+
+CFR_Africa<- metaprop(data=CFR_Africa,
+                      n=Total,
+                      event = Events,
+                      studlab = Study,
+                      sm="PLOGIT",
+                      method = "GLMM",
+                      fixed = F,
+                      random = T)
+
+
+forest10 <- forest(CFR_Africa, digits = 3L, col.diamond = "blue", col.diamond.lines = "black", xlab = "CFR (Global studies)")
+
+summary(CFR_Africa)
+
 
 
