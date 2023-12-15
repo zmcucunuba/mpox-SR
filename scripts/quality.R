@@ -97,11 +97,7 @@ csec_g <- ggplot(csec, aes(fill = answer, y = proportion, x = question)) +
   theme(plot.caption.position="plot") + scale_fill_manual(values=c("#00B159","#F0E442","#ff0000"))
 csec_g
 
-overall <- cowplot::plot_grid(mm_g, cse_g, coh_g, csec_g, nrow = 2, labels = "AUTO")  
+supplementary_figure1 <- cowplot::plot_grid(mm_g, cse_g, coh_g, csec_g, nrow = 2, labels = "AUTO")  
 
-ggsave(plot = overall,        
-       filename = "overall.png", 
-       width = 15.5,                 # Width of image 
-       height = 9,             # Height of image 
-       dpi = 1000) 
+
 
