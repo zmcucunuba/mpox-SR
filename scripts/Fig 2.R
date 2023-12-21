@@ -11,7 +11,7 @@ size_text <- 35
 
 
 
-studies <- data.frame(Design=c("Case series","Cohorts","Cross-sectional", 
+studies <- data.frame(Design=c("Case series","Cohort","Cross-sectional", 
                                "Mathematical models") , 
                       Frequency=c(13,2,8,24))  
 
@@ -89,7 +89,7 @@ ggplot(mapdata, aes( x = long, y = lat, group=group)) +
         axis.title.x=element_blank()) 
 
 p1 <- cowplot::plot_grid(A, NULL, B, nrow = 1,
-                   rel_widths = c(0.3, 0.1, 0.8), 
+                   rel_widths = c(0.4, 0.1, 0.7), 
                    rel_heights = c(1, 1), 
                    labels= c("B", "C"), label_size = size_text * 0.7)
 
