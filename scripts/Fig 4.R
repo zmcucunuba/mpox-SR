@@ -21,12 +21,13 @@ CFR <- metaprop(data=dd0,
                 studlab = Study,
                 sm="PLOGIT",
                 method = "GLMM",
-                fixed = F,
-                random = T)
+                # method.incr = "if0all",
+                fixed = FALSE,
+                random = TRUE)
 
 summary(CFR)
 
-png(filename = "figures/Fig 4 metaprop.png",
+png(filename = "figures/Fig 4 metaprop_LOGIT_GLMM.png",
     width = 480 *3, height = 480 *2, units = "px", 
     pointsize = 12,
     bg = "white")
@@ -40,7 +41,6 @@ dev.off()
 
 
 get_cfr <- function(continent = "Americas", 
-                    colour_fill = "red", 
                     size_text = 10)  {
   dt0 <- read_excel("data/mpox_meta_results.xlsx", sheet = "CFR")
   dat <- dt0 %>% filter(Continent == continent)
@@ -52,12 +52,13 @@ get_cfr <- function(continent = "Americas",
   df$Mean <- df$Mean*100
   df$LowerCI <- df$LowerCI*100
   df$UpperCI <- df$UpperCI*100
-  df$Study[df$Study=="Random effects model"] <- "RE Model"
-  df_nomodel <- df %>% filter(!Study == "RE Model")
-  names_studies <- sort(df_nomodel$Study, decreasing = TRUE)
+  RE_model_name <- "Random Effects Model"
+  df$Study[df$Study=="Random effects model"] <- RE_model_name
+  df_nomodel <- df %>% filter(!Study == RE_model_name)
+  names_studies <- df_nomodel$Study[order(df_nomodel$Continent, decreasing = TRUE)]
   df$StudyLevels <- factor(df$Study,
-                           levels = c("RE Model", names_studies))
-  effect_model <- df %>% filter(Study == "RE Model")
+                           levels = c(RE_model_name, names_studies))
+  effect_model <- df %>% filter(Study == RE_model_name)
   
   # Function to create diamond shape
   create_diamond <- function(center_x, center_y, width, height) {
@@ -78,43 +79,61 @@ get_cfr <- function(continent = "Americas",
                                 round(effect_model$LowerCI,2), ";",
                                 round(effect_model$UpperCI,2), "]")
   df$Weight <- df$Total
-  df$Weight[df$Study == "RE Model"  ] <- NA
+  df$Weight[df$Study == RE_model_name] <- NA
+
   
   ggplot(df, aes(x = StudyLevels, y = Mean)) +
-    geom_errorbar(aes(ymin = LowerCI, ymax = UpperCI), color = colour_fill, width = 0.01, size = size_text/10) + # Confidence interval error bars
-    geom_errorbar(aes(ymin = LowerCI, ymax = UpperCI), width = 0.01, color = "black", size = 0.3) + # Confidence interval error bars
-    geom_hline(yintercept = effect_model$Mean, linetype = "dashed", color = "black", size = size_text/10) + # Vertical line at x = 1
-    geom_point(aes(size = Weight), fill = colour_fill, pch = 22, colour = "black") + # Use color to differentiate points
+    geom_errorbar(aes(ymin = LowerCI, ymax = UpperCI), width = 0, color = "black", size = size_text/8) + # Confidence interval error bars
+    geom_errorbar(aes(ymin = LowerCI, ymax = UpperCI, colour = Continent),width = 0, size = size_text/10) + # Confidence interval error bars
+    geom_hline(yintercept = effect_model$Mean, linetype = "dashed", color = "black", size = size_text/20) + # Vertical line at x = 1
+    geom_point(aes(size = Weight, fill = Continent), pch = 22, colour = "black") + # Use color to differentiate points
     geom_point(colour = "black", size = 0.1) + # Use color to differentiate points
+    geom_errorbar(data = effect_model, aes(ymin = LowerCI, ymax = UpperCI), 
+                  colour = "black", width = 0.0, size = size_text/10) + # Confidence interval error bars
     geom_polygon(data = diamond_data, aes(x = x, y = y), fill = "black") + # Add the filled diamond shape
     cowplot::theme_minimal_grid()  +
-    # scale_y_log10(limits = c(0.1, 30)) +
     coord_flip(ylim = c(0, 25)) + # Flip coordinates for the forest plot
-    labs(title = param_name, x = "", y = lable_name) + # Title of the plot 
-    theme_bw(size_text)+
-    theme(legend.position = c(0.8, 0.5), legend.key.size = unit(1, 'mm'), 
-          legend.text = element_text(size=8), legend.title = element_text(size=8))  +
-    labs(title = continent, x = "", y = lable_name, subtitle = label_effect_model) + # Title of the plot 
+    theme_bw(size_text) +
+    labs(title = continent, x = "", y = "", subtitle = label_effect_model) + # Title of the plot 
     theme(plot.subtitle=element_text(size=size_text, hjust=0, face="italic", color="black")) +
-    theme(legend.position = "none") 
+    theme(legend.position = "none") +
+    theme(plot.margin = unit(c(1, 1, 1, 1), "mm")) +
+    scale_color_manual(values = c( "Americas" = "#fb8072",
+                                   "Africa" = "#80b1d3",
+                                   "Europe"= "#bebada", 
+                                   "Americas & Europe" = "#8dd3c7",
+                                   "All" = "black")) +
+    scale_fill_manual(values = c( "Americas" = "#fb8072",
+                                  "Africa" = "#80b1d3",
+                                  "Europe"= "#bebada", 
+                                  "Americas & Europe" = "#8dd3c7",
+                                  "All Studies" = "black")) +
+    scale_size_continuous(range = c(1, 15)) +
+    theme(
+      plot.margin = margin(5.5, 5.5, 5.5, 3.5),
+      plot.subtitle = element_text(margin = margin(b = -1, unit = "pt"))  # Adjust bottom margin of subtitle
+    )
 }
 
-africa <- get_cfr(continent = "Africa", size_text = 30)
-americas <- get_cfr(continent = "Americas", size_text = 30)
-europe <- get_cfr(continent = "Europe", size_text = 30)
-several <- get_cfr(continent = "Americas & Europe", size_text = 30)
-all <- get_cfr(continent = "All", size_text = 30)
+africa <- get_cfr(continent = "Africa", size_text = 25)
+americas <- get_cfr(continent = "Americas", size_text = 25)
+europe <- get_cfr(continent = "Europe", size_text = 25)
+several <- get_cfr(continent = "Americas & Europe", size_text = 25)
+all <- get_cfr(continent = "All Studies", size_text = 25) +
+  labs(y = "Case Fatality Ratio (%)")
 
 table(dd$Continent) / sum(table(dd$Continent))
 
-png(filename = "figures/Fig 4_lineal.png",
-    width = 480 *2, height = 480 *4, units = "px", 
+png(filename = "figures/Fig 4.png",
+    width = 480 *2, height = 480 *3, units = "px", 
     pointsize = 12,
     bg = "white")
 cowplot::plot_grid(africa, americas, europe, several, all,
                    rel_heights = 
-                     c(0.2, 0.25, 0.4, 0.3, 0.15),
-                   nrow = 5, align = "hv",
-                   labels = "AUTO", label_size = 30)
+                     c(0.22, 0.29, 0.4, 0.25, 0.18),
+                   nrow = 5, align = "hv"
+                   # labels = "AUTO", 
+                   # label_size = 30
+                   )
 dev.off()
 
