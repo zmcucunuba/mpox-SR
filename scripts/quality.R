@@ -5,7 +5,7 @@ library(ggtext)
 
 #quality mathematical models
 
-mm <- read_excel("data/bd.xlsx", sheet = "quality_mm")
+mm <- read_excel("data/map_and_qualityassesment.xlsx", sheet = "quality_mm")
 
 mm$question <- factor(mm$question,                                    
                       levels = c("Q11", "Q10", "Q9","Q8",
@@ -29,7 +29,7 @@ mm_g
 
 #quality cohorts
 
-coh <- read_excel("data/bd.xlsx", sheet = "quality_cohort")
+coh <- read_excel("data/map_and_qualityassesment.xlsx", sheet = "quality_cohort")
 
 coh$question <- factor(coh$question,                                    
                        levels = c("Q6","Q5",
@@ -53,7 +53,7 @@ coh_g
 #quality case series
 
 
-cse <- read_excel("data/bd.xlsx", sheet = "quality_cseries")
+cse <- read_excel("data/map_and_qualityassesment.xlsx", sheet = "quality_cseries")
 
 cse$question <- factor(cse$question,                                    
                        levels = c("Q9","Q8","Q7","Q6","Q5",
@@ -77,7 +77,7 @@ cse_g
 #quality cross sectional
 
 
-csec <- read_excel("data/bd.xlsx", sheet = "quality_csectional")
+csec <- read_excel("data/map_and_qualityassesment.xlsx", sheet = "quality_csectional")
 
 csec$question <- factor(csec$question,                                    
                         levels = c("Q5",
@@ -97,7 +97,7 @@ csec_g <- ggplot(csec, aes(fill = answer, y = proportion, x = question)) +
   theme(plot.caption.position="plot") + scale_fill_manual(values=c("#00B159","#F0E442","#ff0000"))
 csec_g
 
-supplementary_figure1 <- cowplot::plot_grid(mm_g, cse_g, coh_g, csec_g, nrow = 2, labels = "AUTO")  
+Figure4 <- cowplot::plot_grid(mm_g, cse_g, coh_g, csec_g, nrow = 2, labels = "AUTO")  
 
 
 

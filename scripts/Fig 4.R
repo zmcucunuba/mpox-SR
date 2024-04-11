@@ -11,7 +11,7 @@ library(meta)
 
 rm(list = ls())
 
-dd <- read_excel("data/mpox_meta_results.xlsx", sheet = "CFR")
+dd <- read_excel("data/mpox_meta_results.xlsx", sheet = "CFR-exact")
 dd0 <- dd %>% filter(! Study %in% c("Random effects model", "Heterogeneity" ))
 
 CFR <- metaprop(data=dd0,
@@ -20,14 +20,14 @@ CFR <- metaprop(data=dd0,
                 subgroup = Continent,
                 studlab = Study,
                 sm="PLOGIT",
-                method = "GLMM",
+                method = "Inverse",
                 # method.incr = "if0all",
                 fixed = FALSE,
                 random = TRUE)
 
 summary(CFR)
 
-png(filename = "figures/Fig 4 metaprop_LOGIT_GLMM.png",
+png(filename = "figures/Fig 4 metaprop_LOGIT_Inverse.png",
     width = 480 *3, height = 480 *2, units = "px", 
     pointsize = 12,
     bg = "white")
@@ -42,7 +42,7 @@ dev.off()
 
 get_cfr <- function(continent = "Americas", 
                     size_text = 10)  {
-  dt0 <- read_excel("data/mpox_meta_results.xlsx", sheet = "CFR")
+  dt0 <- read_excel("data/mpox_meta_results.xlsx", sheet = "CFR-exact")
   dat <- dt0 %>% filter(Continent == continent)
   table(dat$Parameter)
   param_name <- "CFR"
@@ -100,14 +100,10 @@ get_cfr <- function(continent = "Americas",
     theme(plot.margin = unit(c(1, 1, 1, 1), "mm")) +
     scale_color_manual(values = c( "Americas" = "#fb8072",
                                    "Africa" = "#80b1d3",
-                                   "Europe"= "#bebada", 
-                                   "Americas & Europe" = "#8dd3c7",
-                                   "All" = "black")) +
+                                   "Europe"= "#bebada")) +
     scale_fill_manual(values = c( "Americas" = "#fb8072",
                                   "Africa" = "#80b1d3",
-                                  "Europe"= "#bebada", 
-                                  "Americas & Europe" = "#8dd3c7",
-                                  "All Studies" = "black")) +
+                                  "Europe"= "#bebada")) +
     scale_size_continuous(range = c(1, 15)) +
     theme(
       plot.margin = margin(5.5, 5.5, 5.5, 3.5),
@@ -118,9 +114,8 @@ get_cfr <- function(continent = "Americas",
 africa <- get_cfr(continent = "Africa", size_text = 25)
 americas <- get_cfr(continent = "Americas", size_text = 25)
 europe <- get_cfr(continent = "Europe", size_text = 25)
-several <- get_cfr(continent = "Americas & Europe", size_text = 25)
-all <- get_cfr(continent = "All Studies", size_text = 25) +
-  labs(y = "Case Fatality Ratio (%)")
+
+ # + labs(y = "Case Fatality Ratio (%)")
 
 table(dd$Continent) / sum(table(dd$Continent))
 
@@ -128,9 +123,9 @@ png(filename = "figures/Fig 4.png",
     width = 480 *2, height = 480 *3, units = "px", 
     pointsize = 12,
     bg = "white")
-cowplot::plot_grid(africa, americas, europe, several, all,
+cowplot::plot_grid(africa, americas, europe, 
                    rel_heights = 
-                     c(0.22, 0.29, 0.4, 0.25, 0.18),
+                     c(0.22, 0.29, 0.4),
                    nrow = 5, align = "hv"
                    # labels = "AUTO", 
                    # label_size = 30
