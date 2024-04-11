@@ -11,9 +11,10 @@ library(meta)
 
 rm(list = ls())
 
-dd <- read_excel("data/mpox_meta_results.xlsx", sheet = "CFR-exact")
-dd0 <- dd %>% filter(! Study %in% c("Random effects model", "Heterogeneity" ))
+dat <- read_excel("data/mpox_meta_results_march_2024.xlsx", sheet = "CFR-exact")
+dd0 <- dat %>% filter(! Study %in% c("Random effects model", "Heterogeneity" ))
 
+unique(dat$Continent)
 CFR <- metaprop(data=dd0,
                 n=Total,
                 event = Events,
@@ -27,23 +28,9 @@ CFR <- metaprop(data=dd0,
 
 summary(CFR)
 
-png(filename = "figures/Fig 4 metaprop_LOGIT_Inverse.png",
-    width = 480 *3, height = 480 *2, units = "px", 
-    pointsize = 12,
-    bg = "white")
-CFR_forest <- forest(CFR, 
-                     digits = 5L, 
-                     col.diamond = "blue", 
-                     col.diamond.lines = "black", 
-                     xlab = "CFR")
-dev.off()
 
-
-
-get_cfr <- function(continent = "Americas", 
-                    size_text = 10)  {
-  dt0 <- read_excel("data/mpox_meta_results.xlsx", sheet = "CFR-exact")
-  dat <- dt0 %>% filter(Continent == continent)
+get_cfr <- function(continent = "Americas", size_text = 10, dat)  {
+  dat <- dat %>% filter(Continent == continent)
   table(dat$Parameter)
   param_name <- "CFR"
   lable_name <- "%"
@@ -75,9 +62,9 @@ get_cfr <- function(continent = "Americas",
                                  width = 1, 
                                  height = 1)
   
-  label_effect_model <-  paste0(round(effect_model$Mean,2), " [",
-                                round(effect_model$LowerCI,2), ";",
-                                round(effect_model$UpperCI,2), "]")
+  label_effect_model <-  paste0(round(effect_model$Mean,2), "% [",
+                                round(effect_model$LowerCI,2), "%;",
+                                round(effect_model$UpperCI,2), "%]")
   df$Weight <- df$Total
   df$Weight[df$Study == RE_model_name] <- NA
 
@@ -111,24 +98,25 @@ get_cfr <- function(continent = "Americas",
     )
 }
 
-africa <- get_cfr(continent = "Africa", size_text = 25)
-americas <- get_cfr(continent = "Americas", size_text = 25)
-europe <- get_cfr(continent = "Europe", size_text = 25)
+# africa <- get_cfr(continent = "Africa", size_text = 25)
+americas <- get_cfr(continent = "Americas", size_text = 25, dat = dat)
+europe <- get_cfr(continent = "Europe", size_text = 25, dat = dat)
+ame_eur <- get_cfr(continent = "Americas & Europe", size_text = 25, dat = dat)
 
- # + labs(y = "Case Fatality Ratio (%)")
-
-table(dd$Continent) / sum(table(dd$Continent))
+table(dat$Continent) / sum(table(dat$Continent))
 
 png(filename = "figures/Fig 4.png",
-    width = 480 *2, height = 480 *3, units = "px", 
+    width = 480 *2, height = 480 *2, units = "px", 
     pointsize = 12,
     bg = "white")
-cowplot::plot_grid(africa, americas, europe, 
-                   rel_heights = 
-                     c(0.22, 0.29, 0.4),
-                   nrow = 5, align = "hv"
-                   # labels = "AUTO", 
-                   # label_size = 30
+cowplot::plot_grid(americas, europe,
+                   nrow = 2
+                   # rel_heights = c(0.22, 0.29, 0.3)
                    )
 dev.off()
+
+
+# ,
+# nrow = 3, align = "hv",
+# abels = "AUTO"
 
