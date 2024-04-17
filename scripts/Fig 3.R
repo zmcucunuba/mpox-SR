@@ -19,7 +19,7 @@ rm(list = ls())
 
 
 get_SI <- function(par_colour = "#2b8cbe", size_text = size_text)  { 
-  dat <- read_excel("data/mpox_meta_results.xlsx")
+  dat <- read_excel("data/mpox_meta_results_march_2024.xlsx")
   table(dat$Parameter)
   param_name <- "Serial Interval"
   lable_name <- "Days"
@@ -68,18 +68,20 @@ get_SI <- function(par_colour = "#2b8cbe", size_text = size_text)  {
     scale_color_manual(values = c( "Americas" = "#fb8072",
                                    "Africa" = "#80b1d3",
                                    "Europe"= "#bebada", 
-                                   "Several continents" = "#8dd3c7")) +
+                                   "Several continents" = "#8dd3c7",
+                                   "All" = "black")) +
     scale_fill_manual(values = c( "Americas" = "#fb8072",
                                   "Africa" = "#80b1d3",
                                   "Europe"= "#bebada", 
-                                  "Several continents" = "#8dd3c7")) +
+                                  "Several continents" = "#8dd3c7",
+                                  "All" = "black")) +
     scale_size_continuous(range = c(1, 15)) 
   
   
 }
 
 get_IP <- function(size_text = size_text)  {
-  dat <- read_excel("data/mpox_meta_results.xlsx")
+  dat <- read_excel("data/mpox_meta_results_march_2024.xlsx")
   table(dat$Parameter)
   param_name <- "Incubation Period"
   lable_name <- "Days"
@@ -141,7 +143,7 @@ get_IP <- function(size_text = size_text)  {
 
 get_R <- function(par_colour = "orange",   param_name = "R(t)",  
                   lable_name = expression(R[t]), size_text)  {
-  dat <- read_excel("data/mpox_meta_results.xlsx")
+  dat <- read_excel("data/mpox_meta_results_march_2024.xlsx")
   df <- dat %>% filter(Parameter == param_name,
                        !Study == "Heterogeneity")
   RE_model_name <- "Random Effects Model"
@@ -170,11 +172,15 @@ get_R <- function(par_colour = "orange",   param_name = "R(t)",
     scale_color_manual(values = c( "Americas" = "#fb8072",
                                    "Africa" = "#80b1d3",
                                    "Europe"= "#bebada", 
-                                   "Several continents" = "#8dd3c7")) +
+                                   "Several continents" = "#8dd3c7",
+                                   "Oceania" = "#9970ab",
+                                   "Asia" = "#fb9a99")) +
     scale_fill_manual(values = c( "Americas" = "#fb8072",
                                   "Africa" = "#80b1d3",
                                   "Europe"= "#bebada", 
-                                  "Several continents" = "#8dd3c7")) +
+                                  "Several continents" = "#8dd3c7",
+                                  "Oceania" = "#9970ab",
+                                  "Asia" = "#fb9a99")) +
     scale_size_continuous(range = c(1, 15)) 
   
   
@@ -182,7 +188,7 @@ get_R <- function(par_colour = "orange",   param_name = "R(t)",
 
 
 legend_plot <- function(size_text)  {
-  dat <- read_excel("data/mpox_meta_results.xlsx")
+  dat <- read_excel("data/mpox_meta_results_march_2024.xlsx")
   
   ggplot(dat, aes(x = Study, y = Mean)) +
     geom_errorbar(aes(ymin = LowerCI, ymax = UpperCI, color = Continent), 
@@ -191,11 +197,15 @@ legend_plot <- function(size_text)  {
     scale_color_manual(values = c( "Americas" = "#fb8072",
                                    "Africa" = "#80b1d3",
                                    "Europe"= "#bebada", 
-                                   "Several continents" = "#8dd3c7")) +
+                                   "Several continents" = "#8dd3c7",
+                                   "Oceania" = "#9970ab",
+                                   "Asia" = "#fb9a99")) +
     scale_fill_manual(values = c( "Americas" = "#fb8072",
                                   "Africa" = "#80b1d3",
                                   "Europe"= "#bebada", 
-                                  "Several continents" = "#8dd3c7")) +
+                                  "Several continents" = "#8dd3c7",
+                                  "Oceania" = "#9970ab",
+                                  "Asia" = "#fb9a99")) +
     theme(legend.key = element_rect(fill = "white")) +
     theme(legend.spacing.y = unit(0.1, "cm"), legend.spacing.x = unit(0.1, "cm"),
           legend.text = element_text(size=size_text), legend.title = element_text(size=size_text)) +

@@ -13,7 +13,7 @@ size_text <- 35
 
 studies <- data.frame(Design=c("Case series","Cohort","Cross-sectional", 
                                "Mathematical models") , 
-                      Frequency=c(13,2,8,24))  
+                      Frequency=c(13,2,9,22))  
 
 
 # Create lollipop plot with reordered data 
@@ -38,18 +38,16 @@ A <-
 
 
 my_palette <- c("#66c2a5", "#9970ab", "orange", 
-                "#fb9a99", "#2b8cbe", "#f0027f",
-                "#bf5b17", "white")
+                "#fb9a99", "#2b8cbe", "#f0027f", "white")
 
 B <- waffle(
   c('Incubation period' = 26, 
-    'Case fatality rate' = 24,  
-    'Basic reproduction number' = 9,
-    'Effective reproduction number' = 8, 
-    'Serial interval' = 5, 
-    'Generation time' = 2,
-    'Infectious period' = 1), 
-  rows = 10, 
+    'Case fatality rate' = 25,  
+    'Basic reproduction number' = 8,
+    'Effective reproduction number' = 9, 
+    'Serial interval' = 6, 
+    'Generation time' = 1), 
+  rows = 8, 
   size = 2,
   flip=TRUE, 
   glyph_size = 30, xlab="1 square = 1 reference") +

@@ -264,10 +264,10 @@ summary(CFR_global)
 #cfr (americas)
 
 
-CFR_americas <- read_excel("data/bd.xlsx", sheet = "Americas")
+CFR_several <- read_excel("data/mpox_meta_results_march_2024.xlsx", sheet = "CFR_Africa_Several")
 
 
-CFR_americas<- metaprop(data=CFR_americas,
+CFR_several<- metaprop(data=CFR_several,
                       n=Total,
                       event = Events,
                       studlab = Study,
@@ -277,9 +277,9 @@ CFR_americas<- metaprop(data=CFR_americas,
                       random = T)
 
 
-forest8 <- forest(CFR_americas, digits = 3L, col.diamond = "blue", col.diamond.lines = "black", xlab = "CFR (Global studies)")
+forest8 <- forest(CCFR_several, digits = 3L, col.diamond = "blue", col.diamond.lines = "black", xlab = "CFR (Global studies)")
 
-summary(CFR_americas)
+summary(CFR_several)
 
 
 #cfr (europa)
