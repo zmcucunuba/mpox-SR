@@ -19,14 +19,14 @@ rm(list = ls())
 
 
 get_SI <- function(par_colour = "#2b8cbe", size_text = size_text)  { 
-  dat <- read_excel("data/mpox_meta_results_march_2024.xlsx")
+  dat <- read_excel("data/mpox_meta_results_april_2024.xlsx")
   table(dat$Parameter)
-  param_name <- "Serial Interval"
+  param_name <- "Serial interval"
   lable_name <- "Days"
-  df <- dat %>% filter(Parameter == param_name,
+  df <- dat %>% filter(Parameter == "Serial interval",
                        !Study == "Heterogeneity")
   RE_model_name <- "Random Effects Model"
-  df$Study[df$Study=="Random effects model"] <- RE_model_name
+  df$Study[df$Study=="Random effect model"] <- RE_model_name
   df_nomodel <- df %>% filter(!Study == RE_model_name)
   names_studies <- df_nomodel$Study[order(df_nomodel$Continent, decreasing = TRUE)]
   df$StudyLevels <- factor(df$Study,
@@ -81,14 +81,14 @@ get_SI <- function(par_colour = "#2b8cbe", size_text = size_text)  {
 }
 
 get_IP <- function(size_text = size_text)  {
-  dat <- read_excel("data/mpox_meta_results_march_2024.xlsx")
+  dat <- read_excel("data/mpox_meta_results_april_2024.xlsx")
   table(dat$Parameter)
-  param_name <- "Incubation Period"
+  param_name <- "Incubation period"
   lable_name <- "Days"
   df <- dat %>% filter(Parameter == param_name,
                        !Study == "Heterogeneity")
   RE_model_name <- "Random Effects Model"
-  df$Study[df$Study=="Random effects model"] <- RE_model_name
+  df$Study[df$Study== "Random effect model"] <- RE_model_name
   df_nomodel <- df %>% filter(!Study == RE_model_name)
   names_studies <- df_nomodel$Study[order(df_nomodel$Continent, decreasing = TRUE)]
   df$StudyLevels <- factor(df$Study,
@@ -141,9 +141,9 @@ get_IP <- function(size_text = size_text)  {
   
 }
 
-get_R <- function(par_colour = "orange",   param_name = "R(t)",  
+get_R <- function(par_colour = "orange",   param_name = "Rt",  
                   lable_name = expression(R[t]), size_text)  {
-  dat <- read_excel("data/mpox_meta_results_march_2024.xlsx")
+  dat <- read_excel("data/mpox_meta_results_april_2024.xlsx")
   df <- dat %>% filter(Parameter == param_name,
                        !Study == "Heterogeneity")
   RE_model_name <- "Random Effects Model"
@@ -164,7 +164,7 @@ get_R <- function(par_colour = "orange",   param_name = "R(t)",
     theme_bw(size_text)+
     theme(legend.position = c(0.8, 0.5), legend.key.size = unit(1, 'mm'), 
           legend.text = element_text(size=8), legend.title = element_text(size=8))  +
-    labs(title = lable_name, x = "", y = "") + # Title of the plot 
+    labs(title = "", x = "", y = "") + # Title of the plot 
     theme(plot.subtitle=element_text(size=size_text, hjust=0, face="italic", color="black")) +
     theme(legend.position = "none") +
     theme(axis.text.x = element_text(angle = 0, hjust = 1, vjust = 0.5)) +
@@ -188,7 +188,7 @@ get_R <- function(par_colour = "orange",   param_name = "R(t)",
 
 
 legend_plot <- function(size_text)  {
-  dat <- read_excel("data/mpox_meta_results_march_2024.xlsx")
+  dat <- read_excel("data/mpox_meta_results_april_2024.xlsx")
   
   ggplot(dat, aes(x = Study, y = Mean)) +
     geom_errorbar(aes(ymin = LowerCI, ymax = UpperCI, color = Continent), 
@@ -219,10 +219,10 @@ ip <- get_IP(size_text = size_text )
 si <- get_SI(size_text = size_text )
 
 r0 <- get_R(param_name = "R0", lable_name = expression(R[0]), size_text = size_text )
-rt <- get_R(param_name = "R(t)", lable_name = expression(R[t]), size_text = size_text )
+rt <- get_R(param_name = "Rt", lable_name = expression(R[t]), size_text = size_text )
 rs <- plot_grid(r0, rt,
                 nrow = 2, align = "hv",
-                rel_heights = c(.4, 0.7), 
+                rel_heights = c(0.6, 0.5), 
                 labels = c("C", "D"), label_size = size_text)
 legend_manual <- get_legend(legend_plot(size_text = size_text))
 
@@ -231,7 +231,7 @@ left_part <- plot_grid(ip, si,
                        rel_heights = c(3, 1.5, 1.2), labels = "AUTO", label_size = size_text)
 right_part <- plot_grid(rs, legend_manual, 
                         nrow = 2, align = "hv",
-                        rel_heights = c(0.8,0.2),label_size = size_text)
+                        rel_heights = c(0.85,0.15),label_size = size_text)
 
 
 png(filename = "figures/Fig 3.png",
